@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Filter Demo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .product {
+      background: white;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>Product Listing</h2>
+
+  <div class="filters">
+    <select id="category-filter">
+      <option value="">All Categories</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Clothing">Clothing</option>
+    </select>
+    <select id="sort-filter">
+      <option value="">Sort by</option>
+      <option value="asc">Rating: Low to High</option>
+      <option value="desc">Rating: High to Low</option>
+    </select>
+  </div>
+
+  <div id="products"></div>
+
+  <script>
+    const products = [
+      { name: "Smartphone", category: "Electronics", rating: 4.5 },
+      { name: "T-Shirt", category: "Clothing", rating: 4.0 },
+      { name: "Laptop", category: "Electronics", rating: 4.8 },
+      { name: "Jeans", category: "Clothing", rating: 3.9 }
+    ];
+
+    const productContainer = document.getElementById("products");
+    const categoryFilter = document.getElementById("category-filter");
+    const sortFilter = document.getElementById("sort-filter");
+
+    function displayProducts(items) {
+      productContainer.innerHTML = '';
+      items.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `<h4>${p.name}</h4><p>Category: ${p.category}</p><p>Rating: ${p.rating}</p>`;
+        productContainer.appendChild(div);
+      });
+    }
+
+    function applyFilters() {
+      let filtered = [...products];
+      const category = categoryFilter.value;
+      const sort = sortFilter.value;
+
+      if (category) {
+        filtered = filtered.filter(p => p.category === category);
+      }
+
+      if (sort === "asc") {
+        filtered.sort((a, b) => a.rating - b.rating);
+      } else if (sort === "desc") {
+        filtered.sort((a, b) => b.rating - a.rating);
+      }
+
+      displayProducts(filtered);
+    }
+
+    categoryFilter.onchange = applyFilters;
+    sortFilter.onchange = applyFilters;
+
+    displayProducts(products);
+  </script>
+</body>
+</html>

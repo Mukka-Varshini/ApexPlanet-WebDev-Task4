@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do List Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+      padding: 20px;
+    }
+    h2 { text-align: center; }
+    #task-input, #add-btn {
+      padding: 10px;
+      margin: 5px;
+    }
+    ul { list-style: none; padding: 0; }
+    li {
+      background: #fff;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    button { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>To-Do List</h2>
+  <input id="task-input" type="text" placeholder="Add a task..." />
+  <button id="add-btn">Add</button>
+  <ul id="task-list"></ul>
+
+  <script>
+    const taskInput = document.getElementById("task-input");
+    const taskList = document.getElementById("task-list");
+    const addBtn = document.getElementById("add-btn");
+
+    function loadTasks() {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      taskList.innerHTML = '';
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.textContent = task;
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "❌";
+        removeBtn.onclick = () => removeTask(index);
+        li.appendChild(removeBtn);
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const task = taskInput.value.trim();
+      if (task === "") return;
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      tasks.push(task);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      taskInput.value = "";
+      loadTasks();
+    }
+
+    function removeTask(index) {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      tasks.splice(index, 1);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      loadTasks();
+    }
+
+    addBtn.onclick = addTask;
+    loadTasks();
+  </script>
+</body>
+</html>
